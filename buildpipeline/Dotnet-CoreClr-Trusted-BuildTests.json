@@ -4,6 +4,65 @@
       "enabled": true,
       "continueOnError": false,
       "alwaysRun": false,
+      "displayName": "PowerShell Script",
+      "timeoutInMinutes": 0,
+      "condition": "succeeded()",
+      "task": {
+        "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+        "versionSpec": "1.*",
+        "definitionType": "task"
+      },
+      "inputs": {
+        "scriptType": "inlineScript",
+        "scriptName": "",
+        "arguments": "-path $(build.SourcesDirectory)\\coreclr",
+        "workingFolder": "",
+        "inlineScript": "param($path)\n\nif (Test-Path $path){\n    # this will print out an error each time a file can't be deleted.\n    Remove-Item -Recurse -Force $path\n }\n\nif (Test-Path $path){\n    # in case coreclr is still alive\n    .\\diag_tools\\handle.exe -accepteula $path\n }",
+        "failOnStandardError": "true"
+      }
+    },
+    {
+      "enabled": true,
+      "continueOnError": false,
+      "alwaysRun": false,
+      "displayName": "Run $(PB_Git)",
+      "timeoutInMinutes": 0,
+      "condition": "succeeded()",
+      "task": {
+        "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+        "versionSpec": "1.*",
+        "definitionType": "task"
+      },
+      "inputs": {
+        "filename": "$(PB_Git)",
+        "arguments": "clone $(PB_VsoCoreclrGitUrl) coreclr",
+        "workingFolder": "",
+        "failOnStandardError": "false"
+      }
+    },
+    {
+      "enabled": true,
+      "continueOnError": false,
+      "alwaysRun": false,
+      "displayName": "Run $(PB_Git)",
+      "timeoutInMinutes": 0,
+      "condition": "succeeded()",
+      "task": {
+        "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+        "versionSpec": "1.*",
+        "definitionType": "task"
+      },
+      "inputs": {
+        "filename": "$(PB_Git)",
+        "arguments": "checkout $(SourceBranch)",
+        "workingFolder": "",
+        "failOnStandardError": "false"
+      }
+    },  
+    {
+      "enabled": true,
+      "continueOnError": false,
+      "alwaysRun": false,
       "displayName": "Run script $(VS140COMNTOOLS)\\VsDevCmd.bat",
       "timeoutInMinutes": 0,
       "task": {
@@ -288,6 +347,22 @@
     },
     "CrossgenArg": {
       "value": ""
+    },
+    "PB_Git": {
+      "value": "$(ProgramFiles)\\Git\\cmd\\git.exe"
+    },
+    "PB_VsoAccountName": {
+      "value": "dn-bot"
+    },
+    "VsoPassword": {
+      "value": null,
+      "isSecret": true
+    },
+    "PB_VsoRepositoryName": {
+      "value": "DotNet-CoreCLR-Trusted"
+    },
+    "PB_VsoCoreclrGitUrl": {
+      "value": "https://$(PB_VsoAccountName):$(VsoPassword)@devdiv.visualstudio.com/DevDiv/_git/$(PB_VsoRepositoryName)/"
     }
   },
   "retentionRules": [
