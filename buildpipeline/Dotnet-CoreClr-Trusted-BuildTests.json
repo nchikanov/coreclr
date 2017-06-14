@@ -259,7 +259,7 @@
       "value": "coreclr"
     },
     "SourceBranch": {
-      "value": "master"
+      "value": "dev/defaultintf"
     },
     "HelixApiAccessKey": {
       "value": null,
